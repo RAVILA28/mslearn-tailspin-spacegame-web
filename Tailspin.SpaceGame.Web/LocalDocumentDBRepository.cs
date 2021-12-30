@@ -56,13 +56,16 @@ namespace TailSpin.SpaceGame.Web
             int page = 1, int pageSize = 10
         )
         {
-            var result = _items
-                .Where(queryPredicate) // filter
-                .OrderByDescending(orderDescendingPredicate) // sort
-                .Skip(page * pageSize) // find page
-                .Take(pageSize - 1); // take items
+ 
 
-            return Task<IEnumerable<T>>.FromResult(result);
+            var result = _items.AsQueryable()
+        .Where(queryPredicate) // filter
+        .OrderByDescending(orderDescendingPredicate) // sort
+        .Skip(page * pageSize) // find page
+        .Take(pageSize) // take items
+        .AsEnumerable(); // make enumeratable
+
+    return Task<IEnumerable<T>>.FromResult(result);
         }
 
         /// <summary>
